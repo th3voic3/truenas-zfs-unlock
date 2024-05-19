@@ -33,13 +33,12 @@ load_api_token() {
 
 is_locked() {
   pool="$1"
-  dataset="$2"
 
   # Check if dataset is locked or not
   curl_response_file="$(mktemp)"
   http_code="$(
     curl -X 'GET' \
-    "https://${TRUENAS_HOST}/api/v2.0/pool/dataset?id=${pool}/${dataset}" \
+    "https://${TRUENAS_HOST}/api/v2.0/pool/dataset?id=${pool}" \
     -H 'accept: */*' \
     -H "Authorization: Bearer ${api_token}" \
     --output "${curl_response_file}" \
@@ -76,9 +75,8 @@ is_locked() {
 
 unlock (){
   pool="$1"
-  dataset="$2"
-  dataset_path="${pool}/${dataset}"
-  passphrase="$3"
+  dataset_path="${pool}"
+  passphrase="$2"
 
   curl_response_file="$(mktemp)"
   json=$(jq --null-input \
